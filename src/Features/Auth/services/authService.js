@@ -6,10 +6,10 @@ export const register = async (userData) => {
         return data;
 };
 
-// export const login = async (userData) => {
-//     const data = await api.post('/users/login/', userData)
-//     return data;        
-// };
+export const login = async (userData) => {
+    const data = await api.post('/users/login/', userData)
+    return data;        
+};
 
 export const verifyOTP = async (userData) => {
     const data = await api.post('/users/verify-otp/', userData);

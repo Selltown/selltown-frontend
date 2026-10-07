@@ -1,7 +1,6 @@
 import { useState } from "react"
 import RegisterPage from "./registerPage"
 import ArtisanDetailsPage from "./artisanDetailsPage";
-// import LoginPage from "./loginPage";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { formatPhone } from "../utils/utils"; 
@@ -51,7 +50,6 @@ export default function AuthFlow() {
         }
 
         try {   
-            console.log("Final Data", finalData);
             const response = await register(finalData);
             toast.success(response.detail || 'Otp has been sent to your phone')
             navigate("/verify-otp", {
@@ -72,24 +70,21 @@ export default function AuthFlow() {
     
     return(
         <>
-        {step === 1 && (
-            <RegisterPage 
-            onComplete={handleRegisterScreen} 
-            isSubmitting={isSubmitting}
-            error={error} 
-            />
-        )}
-        {step === 2 && (
-            <ArtisanDetailsPage 
-            onComplete={handleArtisanDetailsScreen} 
-            onBack={() => setStep(1)}
-            isSubmitting={isSubmitting}
-            error={error}
-            />
-        )}
-        {/* {step === 3 && (
-            <LoginPage />
-        )}  */}
+            {step === 1 && (
+                <RegisterPage 
+                onComplete={handleRegisterScreen} 
+                isSubmitting={isSubmitting}
+                error={error} 
+                />
+            )}
+            {step === 2 && (
+                <ArtisanDetailsPage 
+                onComplete={handleArtisanDetailsScreen} 
+                onBack={() => setStep(1)}
+                isSubmitting={isSubmitting}
+                error={error}
+                />
+            )}
         </>
     )
 }

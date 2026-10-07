@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
 // import { login as loginRequest, register as registerRequest, verifyOTP as verifyOTPRequest, logout as logoutRequest } from "../services/authService";
-import { register as registerRequest, verifyOTP as verifyOTPRequest } from "../services/authService";
+import { login as loginRequest, register as registerRequest, verifyOTP as verifyOTPRequest } from "../services/authService";
 
 
 const AuthContext = createContext(null);
@@ -23,15 +23,15 @@ export function AuthProvider({children}) {
     }, []);
 
 
-    // const login = async (credentials) => {
-    //     const { access, refresh, user: loggedInUser } = await loginRequest(credentials);
+    const login = async (credentials) => {
+        const { access, refresh, user: loggedInUser } = await loginRequest(credentials);
         
-    //     localStorage.setItem('access_token', access)
-    //     localStorage.setItem('refresh_token', refresh)
-    //     localStorage.setItem('user', JSON.stringify(loggedInUser));
-    //     setUser(loggedInUser);
-    //     return loggedInUser;
-    // }
+        localStorage.setItem('access_token', access)
+        localStorage.setItem('refresh_token', refresh)
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
+        setUser(loggedInUser);
+        return loggedInUser;
+    }
 
     const register = async (formData) => {
         const response = await registerRequest(formData);
@@ -69,7 +69,7 @@ export function AuthProvider({children}) {
         user,
         isAuthenticated: !!user,
         loading,
-        // login,
+        login,
         register,
         verifyOTP,
         // logout,
