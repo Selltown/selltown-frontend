@@ -5,6 +5,7 @@ import AuthFlow from "./Features/Auth/pages/authFlow";
 import OtpVerificationPage from "./Features/Auth/pages/otpVerificationPage";
 import LoginPage from "./Features/Auth/pages/loginPage";
 import ForgotPasswordPage from "./Features/Auth/pages/forgotPasswordPage";
+import SetNewPasswordPage from "./Features/Auth/pages/setNewPassword";
 
 function App() {
 
@@ -17,7 +18,8 @@ function App() {
           <Route path="register" element={<AuthFlow />} /> 
           <Route path="verify-otp" element={<OtpVerificationPage />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="forgotpassword" element={<ForgotPasswordPage />} />                                                 
+          <Route path="forgotpassword" element={<ForgotPasswordPage />} />
+          <Route path="set-new-password" element={<SetNewPasswordPage />} />                                                           
         </Routes>
       </AuthProvider>
     </BrowserRouter>
