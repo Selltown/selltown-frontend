@@ -69,16 +69,16 @@ export const loginSchema = z.object({
       .min(1, "Password is required")
 })
 
-// export const forgotPasswordSchema = z.object({
-//     phone_number: z.
-//     string()
-//     .trim()
-//     .min(1, "Phone number is required")
-//     .regex(
-//         /^(?:024|054|053|055|059|023|020|050|026|056|027|057)\d{7}$/, 
-//         "Enter a valid Ghanaian number"    
-//     )
-// })  
+export const forgotPasswordSchema = z.object({
+    phone_number: z.
+    string()
+    .trim()
+    .min(1, "Phone number is required")
+    .regex(
+        /^(?:024|054|053|055|059|023|020|050|026|056|027|057)\d{7}$/, 
+        "Enter a valid Ghanaian number"    
+    )
+})  
 
 
 // export const otpSchema = z.object({

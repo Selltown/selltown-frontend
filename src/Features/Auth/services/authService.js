@@ -21,10 +21,10 @@ export const resendOTP = async (phone) => {
         return data;        
 }
 
-// export const requestPasswordReset = async (phone) => {
-//     const data = await api.post('/users/password-reset/request/', phone);
-//     return data;
-// }
+export const requestPasswordReset = async (phone) => {
+    const data = await api.post('/users/password-reset/request/', phone);
+    return data;
+}
 
 export const verifyPasswordReset = async (userData) => {
     const data = await api.post('/users/password-reset/verify/', userData);
