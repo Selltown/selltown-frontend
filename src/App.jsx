@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import AuthFlow from "./Features/Auth/pages/authFlow";
 import OtpVerificationPage from "./Features/Auth/pages/otpVerificationPage";
 import LoginPage from "./Features/Auth/pages/loginPage";
+import ForgotPasswordPage from "./Features/Auth/pages/forgotPasswordPage";
 
 function App() {
 
@@ -15,7 +16,8 @@ function App() {
           <Route path="/" element={<Navigate to="/register" replace/>}/>
           <Route path="register" element={<AuthFlow />} /> 
           <Route path="verify-otp" element={<OtpVerificationPage />} />
-          <Route path="login" element={<LoginPage />} />                                       
+          <Route path="login" element={<LoginPage />} />
+          <Route path="forgotpassword" element={<ForgotPasswordPage />} />                                                 
         </Routes>
       </AuthProvider>
     </BrowserRouter>
