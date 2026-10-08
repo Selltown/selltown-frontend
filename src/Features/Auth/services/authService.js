@@ -31,10 +31,10 @@ export const verifyPasswordReset = async (userData) => {
     return data;
 }
 
-// export const confirmPasswordReset = async (userData) => {
-//     const data = await api.post('/users/password-reset/confirm/', userData);
-//     return data;
-// }
+export const confirmPasswordReset = async (userData) => {
+    const data = await api.post('/users/password-reset/confirm/', userData);
+    return data;
+}
 
 export const fetchCrafts = async () => {
     const data = await api.get('/craft/all/');
