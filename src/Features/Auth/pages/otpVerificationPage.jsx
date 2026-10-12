@@ -87,7 +87,7 @@ export default function OtpVerificationPage() {
         toast.success("You've been verified successfully!");
         sessionStorage.removeItem(STORAGE_KEY);
         console.log("User Verified Successfully!")
-        // navigate("/home");
+        navigate("/home");
 
       }
     } catch (error) {
@@ -116,8 +116,10 @@ export default function OtpVerificationPage() {
       setDigits(Array(OTP_LENGTH).fill(""))
       setSecondsLeft(OTP_EXPIRY_SECONDS)
       inputRefs.current[0]?.focus()      
-      sessionStorage.removeItem(STORAGE_KEY)
+      sessionStorage.removeItem(STORAGE_KEY);
+
     } catch (error) {
+      
       console.log(error.response?.data?.detail)
       console.log(error.message);
       setError(getFriendlyErrorMessage(error));
