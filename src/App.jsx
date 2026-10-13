@@ -9,6 +9,7 @@ import ForgotPasswordPage from "./Features/Auth/pages/forgotPasswordPage";
 import SetNewPasswordPage from "./Features/Auth/pages/setNewPassword";
 import HomePage from "./Features/Home/pages/homePage";
 import StorefrontPage from "./Features/Storefront/pages/storefrontPage";
+import ItemDetailsPage from "./Features/Storefront/pages/itemDetailsPage";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route element={<ProtectedRoute/>}>
             <Route path="home" element={<HomePage />} />
             <Route path="storefront/:slug" element={<StorefrontPage />} />
+            <Route path="storefront/:slug/items/:itemSlug" element={<ItemDetailsPage />} />
           </Route>
                                                                      
         </Routes>
