@@ -11,6 +11,7 @@ import HomePage from "./Features/Home/pages/homePage";
 import StorefrontPage from "./Features/Storefront/pages/storefrontPage";
 import ItemDetailsPage from "./Features/Storefront/pages/itemDetailsPage";
 import SettingsPage from "./Features/Settings/pages/settings";
+import ProfilePage from "./Features/Profile/pages/profile";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="storefront/:slug" element={<StorefrontPage />} />
             <Route path="storefront/:slug/items/:itemSlug" element={<ItemDetailsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
                                                                      
         </Routes>
