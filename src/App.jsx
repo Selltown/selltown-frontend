@@ -8,6 +8,7 @@ import LoginPage from "./Features/Auth/pages/loginPage";
 import ForgotPasswordPage from "./Features/Auth/pages/forgotPasswordPage";
 import SetNewPasswordPage from "./Features/Auth/pages/setNewPassword";
 import HomePage from "./Features/Home/pages/homePage";
+import StorefrontPage from "./Features/Storefront/pages/storefrontPage";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           {/* protected Routes */}
           <Route element={<ProtectedRoute/>}>
             <Route path="home" element={<HomePage />} />
+            <Route path="storefront/:slug" element={<StorefrontPage />} />
           </Route>
                                                                      
         </Routes>
