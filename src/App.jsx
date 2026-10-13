@@ -10,6 +10,7 @@ import SetNewPasswordPage from "./Features/Auth/pages/setNewPassword";
 import HomePage from "./Features/Home/pages/homePage";
 import StorefrontPage from "./Features/Storefront/pages/storefrontPage";
 import ItemDetailsPage from "./Features/Storefront/pages/itemDetailsPage";
+import SettingsPage from "./Features/Settings/pages/settings";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="home" element={<HomePage />} />
             <Route path="storefront/:slug" element={<StorefrontPage />} />
             <Route path="storefront/:slug/items/:itemSlug" element={<ItemDetailsPage />} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
                                                                      
         </Routes>
