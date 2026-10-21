@@ -1,4 +1,4 @@
-import api from "../utils/axios";
+import api from "../../../utils/axios";
 
 // Register new user
 export const register = async (userData) => {
@@ -47,7 +47,7 @@ export const fetchCrafts = async () => {
 //     return data;
 // };
 
-// export const logout = async (refreshToken) => {
-//     const data = await api.post('/users/logout/', {refresh_token: refreshToken});
-//     return data;
-// }
+export const logout = async (refreshToken) => {
+    const data = await api.post('/users/logout/', {refresh_token: refreshToken});
+    return data;
+}
