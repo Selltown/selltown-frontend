@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { login as loginRequest, register as registerRequest, verifyOTP as verifyOTPRequest } from "../services/authService";
+import { login as loginRequest, register as registerRequest, verifyOTP as verifyOTPRequest, logout as logoutRequest } from "../services/authService";
 
 
 const AuthContext = createContext(null);
@@ -46,23 +46,23 @@ export function AuthProvider({children}) {
        return verifiedUser;
     }
 
-    // const logout = async () => {
-    //     const refreshToken = localStorage.getItem('refresh_token');
+    const logout = async () => {
+        const refreshToken = localStorage.getItem('refresh_token');
 
-    //     try {
-    //         const response = await logoutRequest(refreshToken);
-    //         console.log('logout response', response);
+        try {
+            const response = await logoutRequest(refreshToken);
+            console.log('logout response', response);
 
-    //     } catch (error) {
-    //         console.log("Logout blacklist failed", error);
+        } catch (error) {
+            console.log("Logout blacklist failed", error);
             
-    //     } finally {
-    //         localStorage.removeItem("access_token");
-    //         localStorage.removeItem("refresh_token");
-    //         localStorage.removeItem("user");
-    //         setUser(null);
-    //     }      
-    // };
+        } finally {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("user");
+            setUser(null);
+        }      
+    };
 
     const value = {
         user,
@@ -71,7 +71,7 @@ export function AuthProvider({children}) {
         login,
         register,
         verifyOTP,
-        // logout,
+        logout,
         // setUser, // handy if you need to patch user profile data elsewhere
     }
 

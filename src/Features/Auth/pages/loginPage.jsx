@@ -27,7 +27,6 @@ export default function LoginPage() {
         try {
             await login({phone_number: finalData.phone_number, password: finalData.password})
             navigate("/home");
-            console.log("Login Successful, Navigating to home...")
         } catch (error) {
             setError(getFriendlyErrorMessage(error));
         }
