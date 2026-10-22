@@ -1,11 +1,11 @@
 import { ShoppingBag } from "lucide-react"
 import { Link } from "react-router"
 
-export default function StorefrontCard({name, slug, craft, region, location, coverImage}) {
+export default function StorefrontCard({storefront_id, slug, name, craft, region, location, coverImage}) {
 
     return (
         <Link
-            to={`/storefront/${slug}`}
+            to={`/storefront/${storefront_id}/${slug}`}
             className="border border-gray-300 rounded-xl"
         >
             {/* <div className="border border-gray-300 rounded-xl"> */}

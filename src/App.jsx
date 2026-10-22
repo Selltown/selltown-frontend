@@ -30,7 +30,7 @@ function App() {
           {/* protected Routes */}
           <Route element={<ProtectedRoute/>}>
             <Route path="home" element={<HomePage />} />
-            <Route path="storefront/:slug" element={<StorefrontPage />} />
+            <Route path="storefront/:storefrontId/:slug" element={<StorefrontPage />} />
             <Route path="storefront/:slug/items/:itemSlug" element={<ItemDetailsPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="profile" element={<ProfilePage />} />

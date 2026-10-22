@@ -1,28 +1,49 @@
 import { useNavigate } from 'react-router'
-import { LucideHammer, Bell, Menu, SlidersHorizontal, ChevronDown, Search, X, Store } from "lucide-react";
-import { useState } from "react";
+import { LucideHammer, SlidersHorizontal, Search, CircleAlert } from "lucide-react";
+import { useEffect, useState } from "react";
 import FilterModal from "../components/filterModal";
 import MobileMenu from "../../../components/mobileMenu";
 import StorefrontCard from '../components/storefrontCard';
-import { STOREFRONTS } from '../../../data/storefronts';
+import { fetchStorefronts } from '../services/homeService';
+import Pagination from '../../../components/pagination';
+import { slugify } from '../utils/slugify';
 
-const PAGE_SIZE = 6;
 
 export default function HomePage() {
     const navigate = useNavigate();
     const [openFilter, setOpenFilter] = useState(false);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
-
-    const startIndex = (page - 1) * PAGE_SIZE;
-    const endIndex = startIndex + PAGE_SIZE;
-    const visibleStorefronts = STOREFRONTS.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(STOREFRONTS.length / PAGE_SIZE);
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+    const [count, setCount] = useState(0);
+    const [storefronts, setStorefronts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const PAGE_SIZE = 10;
     const goToPage = (number) => {
         setPage(number);
         window.scrollTo({top: 0, behavior: "smooth"})
     }
+    const totalPages = Math.ceil(count/ PAGE_SIZE);
+
+
+    useEffect(() => {
+        async function fetchStores() {
+            setLoading(true);
+
+            try {
+                const response = await fetchStorefronts(page);
+                setStorefronts(response.results);
+                setCount(response.count);
+            } catch (error) {
+                setError("Failed to load Storefronts")
+                console.log(error)
+            } finally {
+                setLoading(false);
+            }            
+        }
+
+        fetchStores();
+    }, [page])
   
     
     return(
@@ -78,35 +99,42 @@ export default function HomePage() {
                     </button>
                 </div>
                 
-                {/* Artisan card grid */}
+                {/* Storefront grid */}
                 <div>
                     <p className="mb-3">Browse storefronts</p>
-                    <div className="grid grid-cols-2 sm:gap-4 sm:grid-cols-3 gap-3">
-                        {visibleStorefronts.map((card) => (
-                            <StorefrontCard 
-                                key={card.id}
-                                slug={card.slug}
-                                name={card.name}
-                                craft={card.craft}
-                                region={card.region}
-                                location={card.location}
-                                coverImage={''}
-                            />
-                        ))}
-                    </div>
-                    <div className="flex justify-center items-center gap-2 mt-6">
-                        {pageNumbers.map((number) => (
-                            <button
-                            key={number}
-                            onClick={() => goToPage(number)}
-                            className={`w-8 h-8 rounded-lg text-sm ${
-                                page === number ? "bg-primary text-white" : "bg-gray-200"
-                            }`}
-                            >
-                                {number}
-                            </button>
-                        ))}
-                    </div>
+
+                    {loading ? (
+                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>Loading storefronts...</p>
+                    ) : error ? (
+                        <div className='flex flex-col items-center mt-[30%] text-xl font-semibold text-red-400'>
+                            <CircleAlert size={30}/>
+                            <p className='mt-3'>{error}</p>                           
+                        </div>
+                    ) : storefronts.length === 0 ? (
+                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>No storefronts found</p>
+                    ) : (
+                        <div className="grid grid-cols-2 sm:gap-4 sm:grid-cols-3 gap-3">
+                            {storefronts.map((store) => (
+                                <StorefrontCard 
+                                    key={store.storefront_id}
+                                    storefront_id={store.storefront_id}
+                                    slug={slugify(store.name)}
+                                    name={store.name}
+                                    craft={store.name}
+                                    region={store.name}
+                                    location={store.name}
+                                    coverImage={store.image ?? ""}
+                                />
+                            ))}
+                        </div>                        
+                    )}
+
+                    <Pagination
+                        page={page} 
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                        loading={loading}
+                    />
                 </div>
                                 
                 {/* Filter sheet overlay */}
