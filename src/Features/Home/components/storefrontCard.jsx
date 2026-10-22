@@ -16,9 +16,9 @@ export default function StorefrontCard({storefront_id, slug, name, craft, region
                     /> :  <ShoppingBag />}
                 </div>
                 <div className="px-2 py-3">
-                    <h1 className="font-bold tracking-tighter">{name}</h1>
-                    <p className="mb-3 text-sm">{craft}, <span>{location}</span></p>
-                    <p className="text-xs">{region}</p>
+                    <h1 className="font-bold tracking-tight">{name}</h1>
+                    <p className="mb-3 text-xs truncate">{craft}, <span>{location}</span></p>
+                    <p className="tracking-tight text-xs">{region}</p>
                 </div>
             {/* </div>         */}
         </Link>

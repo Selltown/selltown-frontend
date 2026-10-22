@@ -7,9 +7,11 @@ import StorefrontCard from '../components/storefrontCard';
 import { fetchStorefronts } from '../services/homeService';
 import Pagination from '../../../components/pagination';
 import { slugify } from '../utils/slugify';
+import { useAuth } from '../../Auth/context/AuthContext';
 
 
 export default function HomePage() {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [openFilter, setOpenFilter] = useState(false);
     const [page, setPage] = useState(1);
@@ -24,7 +26,6 @@ export default function HomePage() {
         window.scrollTo({top: 0, behavior: "smooth"})
     }
     const totalPages = Math.ceil(count/ PAGE_SIZE);
-
 
     useEffect(() => {
         async function fetchStores() {
@@ -88,15 +89,21 @@ export default function HomePage() {
                 {/* Storefront banner */}
                 <div className="flex justify-between items-center px-4 py-5 bg-primary-light rounded-xl">
                     <div className="">
-                        <h4 className="text-sm text-primary mb-1">Your storefront</h4>
-                        <p className="font-bold">Ama's Batik Studio</p>
+                        <h4 className="text-sm text-primary mb-1">My storefront</h4>
+                        <p className="font-bold">{user.storefront_name}</p>
                     </div>
-                    <button
-                    // onClick={() => navigate('/storefront')}
-                    className="bg-white text-primary text-sm rounded-lg px-4 py-2"
-                    >
-                        View
-                    </button>
+                    {user.storefront_id ?
+                        (<button 
+                            className="bg-white text-primary text-sm rounded-lg px-4 py-2"
+                        >
+                            View
+                        </button>) : 
+                        (<button
+                            className="bg-white text-primary text-sm rounded-lg px-4 py-2"
+                        >
+                            Create
+                        </button>)
+                    }
                 </div>
                 
                 {/* Storefront grid */}
@@ -118,12 +125,12 @@ export default function HomePage() {
                                 <StorefrontCard 
                                     key={store.storefront_id}
                                     storefront_id={store.storefront_id}
-                                    slug={slugify(store.name)}
-                                    name={store.name}
-                                    craft={store.name}
-                                    region={store.name}
-                                    location={store.name}
-                                    coverImage={store.image ?? ""}
+                                    slug={slugify(store.storefront_name)}
+                                    name={store.storefront_name}
+                                    craft={store.craft_name}
+                                    region={store.location.region}
+                                    location={store.location.full_address}
+                                    coverImage={store.storefront_image ?? ""}
                                 />
                             ))}
                         </div>                        

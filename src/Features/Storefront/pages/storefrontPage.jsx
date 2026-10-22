@@ -1,18 +1,52 @@
-import { ArrowLeft, Menu, ShirtIcon, LucideShoppingBasket, LucideShirt, LucideHeadset, ShoppingBag, Store } from "lucide-react"
 import { Link, useParams } from "react-router"
 import { IoBasketOutline } from 'react-icons/io5'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ItemFormModal from "../components/itemformModal"
 import PageHeader from "../../../components/pageHeader"
-import { STOREFRONTS } from "../../../data/storefronts"
 import StorefrontItemCard from "../components/storefrontItemCard"
+import { fetchStorefrontItems } from "../services/storefrontService"
+import { slugify } from "../../Home/utils/slugify"
+import Pagination from "../../../components/pagination"
 
 
 export default function StorefrontPage(){
-    const { slug } = useParams();
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(""); 
+    const [page, setPage] = useState(1);
+    const [count, setCount] = useState(0);
+    const { storefrontId, slug } = useParams();
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const PAGE_SIZE = 10;
+    const goToPage = (number) => {
+        setPage(number);
+        window.scrollTo({top: 0, behavior: "smooth"})
+    }
+    const totalPages = Math.ceil(count/ PAGE_SIZE);
 
-    const storefront = STOREFRONTS.find((s) => s.slug === slug);
+    // console.log(storefrontId)
+
+    useEffect(() => {
+        async function loadItems() {
+            setLoading(true);
+            setError("");
+
+            try {
+                const response = await fetchStorefrontItems(storefrontId);
+                setItems(response.results)
+                setCount(response.count)
+                // console.log(response);
+            } catch (error) {
+                setError("Failed to load storefront items.")
+                console.log(error)
+            } finally {
+                setLoading(false);
+            }
+            
+        } if(storefrontId) {
+            loadItems();
+        }
+    }, [storefrontId])
     
     return(
         <div>
@@ -27,9 +61,9 @@ export default function StorefrontPage(){
                                 <IoBasketOutline className="text-primary" size={25}/>
                             </div>                        
                         </div>
-                        <h4  className="font-bold">{storefront.name}</h4>
+                        <h4  className="font-bold">Storefront name goes here</h4>
                         <Link className="text-primary">
-                            {`artisanmarket.gh/${storefront.slug}`}
+                            {`selltown.gh/${slug}`}
                         </Link>
 
                     </div>
@@ -45,25 +79,41 @@ export default function StorefrontPage(){
                         </div>
                     </div>
 
-                    {/* Product grid  */}
-                    <div className="">
-                        {storefront.items.length > 0 ? (
-                            <div className="grid grid-cols-2 sm:gap-4 sm:grid-cols-3 gap-3">
-                                {storefront.items.map((card) => (
-                                    <StorefrontItemCard 
-                                    key={card.id}
-                                    slug={card.slug}
-                                    name={card.name}
-                                    description={card.description}
-                                    status={card.status}
-                                    image={card.image}
-                                    price={card.price}
-                                    storefrontSlug={storefront.slug}
-                                    />
-                                ))}
-                            </div>
-                        ) : (<div className="text-xl"><p>No Storefront items yet</p></div>)}
-                    </div>
+                {/* Item grid */}
+                <div>
+                    {loading ? (
+                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>Loading items...</p>
+                    ) : error ? (
+                        <div className='flex flex-col items-center mt-[30%] text-xl font-semibold text-red-400'>
+                            <CircleAlert size={30}/>
+                            <p className='mt-3'>{error}</p>                           
+                        </div>
+                    ) : items.length === 0 ? (
+                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>No storefronts items yet</p>
+                    ) : (
+                        <div className="grid grid-cols-2 sm:gap-4 sm:grid-cols-3 gap-3">
+                            {items.map((card) => (
+                                <StorefrontItemCard 
+                                key={card.item_id}
+                                slug={slugify(card.item_name)}
+                                name={card.item_name}
+                                description={card.description}
+                                status={card.status_name}
+                                image={card.image}
+                                price={card.price}
+                                storefrontSlug={slug}
+                                />
+                            ))}
+                        </div>                       
+                    )}
+
+                    <Pagination
+                        page={page} 
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                        loading={loading}
+                    />
+                </div>                    
  
                 </div>
             </main>
