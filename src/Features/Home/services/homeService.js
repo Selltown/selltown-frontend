@@ -11,3 +11,19 @@ export const fetchStorefronts = async (page = 1) => {
     });
     return data;
 }
+
+export const checkStorefrontName = async (name) => {
+    const data = await api.get('/storefronts/check-name/', {
+        params: { name }
+    })
+    return data.available
+}
+
+export const createStorefront = async ({ name, image }) => {
+    const formData = new FormData();
+    formData.append("name", name);
+    if (image) formData.append("image", image);
+
+    const data = await api.post('/storefronts/create/', formData);
+    return data;
+};

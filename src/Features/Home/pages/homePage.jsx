@@ -8,6 +8,7 @@ import { fetchStorefronts } from '../services/homeService';
 import Pagination from '../../../components/pagination';
 import { slugify } from '../utils/slugify';
 import { useAuth } from '../../Auth/context/AuthContext';
+import CreateStorefrontModal from '../components/createStorefrontModal';
 
 
 export default function HomePage() {
@@ -20,6 +21,8 @@ export default function HomePage() {
     const [storefronts, setStorefronts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
     const PAGE_SIZE = 10;
     const goToPage = (number) => {
         setPage(number);
@@ -44,7 +47,7 @@ export default function HomePage() {
         }
 
         fetchStores();
-    }, [page])
+    }, [page, refreshKey])
   
     
     return(
@@ -90,18 +93,19 @@ export default function HomePage() {
                 <div className="flex justify-between items-center px-4 py-5 bg-primary-light rounded-xl">
                     <div className="">
                         <h4 className="text-sm text-primary mb-1">My storefront</h4>
-                        <p className="font-bold">{user.storefront_name}</p>
+                        <p className="font-bold">{user.storefront_name ?? "No storefront yet"}</p>
                     </div>
                     {user.storefront_id ?
                         (<button 
                             className="bg-white text-primary text-sm rounded-lg px-4 py-2"
                         >
-                            View
+                            View Storefront
                         </button>) : 
                         (<button
+                        onClick={() => setShowCreateModal(true)}
                             className="bg-white text-primary text-sm rounded-lg px-4 py-2"
                         >
-                            Create
+                            Create Storefront
                         </button>)
                     }
                 </div>
@@ -146,6 +150,11 @@ export default function HomePage() {
                                 
                 {/* Filter sheet overlay */}
                 <FilterModal openFilter={openFilter} setOpenFilter={setOpenFilter}/>
+                
+                {/* Create storefront modal */}
+                {showCreateModal && <CreateStorefrontModal showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal} onStorefrontCreated={() => {
+                    setRefreshKey((prev) => prev + 1)
+                }} />}
             </div>
         </div>
     )
