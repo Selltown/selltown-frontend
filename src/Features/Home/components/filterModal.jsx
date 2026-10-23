@@ -22,7 +22,7 @@ export default function FilterModal({openFilter, setOpenFilter}) {
         async function loadOptions() {
             try {
                 const craftsResponse = await fetchCrafts();
-                setCrafts(craftsResponse.results);
+                setCrafts(craftsResponse);
             } catch (error) {
                 console.log(error);
             }

@@ -5,12 +5,23 @@ import { login as loginRequest, register as registerRequest, verifyOTP as verify
 const AuthContext = createContext(null);
 
 export function AuthProvider({children}) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // true until we've checked for an existing session
+    const [user, setUserState] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // On app load: if we have a saved user + access token, restore the session
-    // from localStorage. Your API contract has no "/me" endpoint shown, so we
-    // trust the user object we stored at login time rather than re-fetching it. 
+
+    const setUser = (updatedUser) => {
+        setUserState((prevUser) => {
+            const newUser = typeof updatedUser === "function" ? updatedUser(prevUser) : updatedUser;
+
+            if (newUser) {
+                localStorage.setItem("user", JSON.stringify(newUser));
+            } else {
+                localStorage.removeItem("user");
+            }
+
+            return newUser;
+        })
+    }
     
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
@@ -50,8 +61,7 @@ export function AuthProvider({children}) {
         const refreshToken = localStorage.getItem('refresh_token');
 
         try {
-            const response = await logoutRequest(refreshToken);
-            console.log('logout response', response);
+              await logoutRequest(refreshToken);
 
         } catch (error) {
             console.log("Logout blacklist failed", error);
@@ -72,7 +82,7 @@ export function AuthProvider({children}) {
         register,
         verifyOTP,
         logout,
-        // setUser, // handy if you need to patch user profile data elsewhere
+        setUser, // handy if you need to patch user profile data elsewhere
     }
 
 
