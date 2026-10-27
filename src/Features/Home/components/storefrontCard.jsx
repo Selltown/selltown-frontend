@@ -6,12 +6,13 @@ export default function StorefrontCard({storefront_id, slug, name, craft, region
     return (
         <Link
             to={`/storefront/${storefront_id}/${slug}`}
-            className="border border-gray-300 rounded-xl"
+            className="border border-gray-300 rounded-xl max-sm"
         >
                 <div className="h-20 border-b rounded-t-lg border-gray-300 bg-gray-200 flex justify-center items-center">
                     {coverImage ? <img
-                    src=""
-                    alt=""
+                    src={coverImage}
+                    alt="storefront_image"
+                    className="h-full w-full object-cover"
                     /> :  <ShoppingBag />}
                 </div>
                 <div className="px-2 py-3">

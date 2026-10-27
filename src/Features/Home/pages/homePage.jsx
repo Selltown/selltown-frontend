@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { LucideHammer, SlidersHorizontal, Search, CircleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import FilterModal from "../components/filterModal";
@@ -97,6 +97,7 @@ export default function HomePage() {
                     </div>
                     {user.storefront_id ?
                         (<button 
+                            onClick={() => navigate(`/storefront/${user.storefront_id}/${slugify(user.storefront_name)}`)}
                             className="bg-white text-primary text-sm rounded-lg px-4 py-2"
                         >
                             View Storefront
@@ -133,7 +134,7 @@ export default function HomePage() {
                                     name={store.storefront_name}
                                     craft={store.craft_name}
                                     region={store.location.region}
-                                    location={store.location.full_address}
+                                    location={store.location.name}
                                     coverImage={store.storefront_image ?? ""}
                                 />
                             ))}
@@ -152,9 +153,7 @@ export default function HomePage() {
                 <FilterModal openFilter={openFilter} setOpenFilter={setOpenFilter}/>
                 
                 {/* Create storefront modal */}
-                {showCreateModal && <CreateStorefrontModal showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal} onStorefrontCreated={() => {
-                    setRefreshKey((prev) => prev + 1)
-                }} />}
+                {showCreateModal && <CreateStorefrontModal showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal} onStorefrontCreated={() => setRefreshKey((prev) => prev + 1)} />}
             </div>
         </div>
     )
