@@ -5,7 +5,7 @@ export default function StorefrontCard({storefront_id, slug, name, craft, region
 
     return (
         <Link
-            to={`/storefront/${storefront_id}/${slug}`}
+            to={`/${slug}`}
             className="border border-gray-300 rounded-xl max-sm"
         >
                 <div className="h-20 border-b rounded-t-lg border-gray-300 bg-gray-200 flex justify-center items-center">

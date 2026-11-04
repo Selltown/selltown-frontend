@@ -67,7 +67,8 @@ export default function CreateStorefrontModal({setShowCreateModal, onStorefrontC
             setUser((prev) => ({
                 ...prev,
                 storefront_id: storefront.id,
-                storefront_name: storefront.name
+                storefront_name: storefront.name,
+                current_slug: storefront.current_slug
             }))
             onStorefrontCreated?.();
             setShowCreateModal(false);

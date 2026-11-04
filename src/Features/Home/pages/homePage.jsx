@@ -30,6 +30,8 @@ export default function HomePage() {
     }
     const totalPages = Math.ceil(count/ PAGE_SIZE);
 
+    // console.log(storefronts)
+
     useEffect(() => {
         async function fetchStores() {
             setLoading(true);
@@ -97,7 +99,7 @@ export default function HomePage() {
                     </div>
                     {user.storefront_id ?
                         (<button 
-                            onClick={() => navigate(`/storefront/${user.storefront_id}/${slugify(user.storefront_name)}`)}
+                            onClick={() => navigate(`/${user.current_slug}`)}
                             className="bg-white text-primary text-sm rounded-lg px-4 py-2"
                         >
                             View Storefront
@@ -130,7 +132,7 @@ export default function HomePage() {
                                 <StorefrontCard 
                                     key={store.storefront_id}
                                     storefront_id={store.storefront_id}
-                                    slug={slugify(store.storefront_name)}
+                                    slug={store.current_slug}
                                     name={store.storefront_name}
                                     craft={store.craft_name}
                                     region={store.location.region}

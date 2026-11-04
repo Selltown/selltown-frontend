@@ -1,6 +1,13 @@
 import api from "../../../utils/axios";
 
-export const fetchStorefrontItems = async (storefrontId) => {
-    const data = await api.get(`/items/storefront/${storefrontId}`);
+export const fetchStorefrontItems = async (slug, page = 1) => {
+    const data = await api.get(`/items/storefront/${slug}/`, {
+        params: { page }
+    });
+    return data;
+}
+
+export const fetchStorefrontData = async (slug) => {
+    const data = await api.get(`/storefronts/by-slug/${slug}/`);
     return data;
 }
