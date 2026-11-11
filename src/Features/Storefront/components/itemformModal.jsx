@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { X, Camera, Plus, ChevronDown, Lock, Trash2 } from "lucide-react";
 
-/**
- * One modal for both flows — pass mode="create" or mode="edit".
- * In edit mode, fields show pre-filled sample values and a
- * "Delete item" row appears at the bottom.
- *
- * Still static for now: hook up real state (useState/RHF),
- * the actual upload handler, and onSubmit once you're ready.
- */
 const STATUS = ["Available", "Made-to-order", "Sold"];
 
 export default function ItemFormModal({ mode = "create", onClose }) {
@@ -16,8 +8,14 @@ export default function ItemFormModal({ mode = "create", onClose }) {
     const isEdit = mode === "edit";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4">
-      <div className="w-full max-w-sm overflow-hidden rounded-2xl bg-white">
+    <div 
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-xs p-4"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm overflow-hidden rounded-2xl bg-white"
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
           <div className="flex items-center gap-2.5">

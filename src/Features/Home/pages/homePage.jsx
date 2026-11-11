@@ -6,9 +6,9 @@ import MobileMenu from "../../../components/mobileMenu";
 import StorefrontCard from '../components/storefrontCard';
 import { fetchStorefronts } from '../services/homeService';
 import Pagination from '../../../components/pagination';
-import { slugify } from '../utils/slugify';
 import { useAuth } from '../../Auth/context/AuthContext';
 import CreateStorefrontModal from '../components/createStorefrontModal';
+import HomepageCardsSkeleton from '../components/Skeletons/homepageCardsSkeleton';
 
 
 export default function HomePage() {
@@ -29,8 +29,6 @@ export default function HomePage() {
         window.scrollTo({top: 0, behavior: "smooth"})
     }
     const totalPages = Math.ceil(count/ PAGE_SIZE);
-
-    // console.log(storefronts)
 
     useEffect(() => {
         async function fetchStores() {
@@ -118,14 +116,14 @@ export default function HomePage() {
                     <p className="mb-3">Browse storefronts</p>
 
                     {loading ? (
-                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>Loading storefronts...</p>
+                        <HomepageCardsSkeleton />
                     ) : error ? (
                         <div className='flex flex-col items-center mt-[30%] text-xl font-semibold text-red-400'>
                             <CircleAlert size={30}/>
                             <p className='mt-3'>{error}</p>                           
                         </div>
                     ) : storefronts.length === 0 ? (
-                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>No storefronts found</p>
+                        <p className='text-center mt-[30%] text-xl font-semibold text-gray-400'>No storefronts found</p>  
                     ) : (
                         <div className="grid grid-cols-2 sm:gap-4 sm:grid-cols-3 gap-3">
                             {storefronts.map((store) => (
