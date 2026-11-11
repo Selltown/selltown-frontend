@@ -11,3 +11,8 @@ export const fetchStorefrontData = async (slug) => {
     const data = await api.get(`/storefronts/by-slug/${slug}/`);
     return data;
 }
+
+export const updateStorefront = async (id, name) => {
+    const data = await api.patch(`/storefronts/${id}/update/`, {name});
+    return data;
+}
