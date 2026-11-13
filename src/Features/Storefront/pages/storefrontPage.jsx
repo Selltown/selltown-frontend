@@ -11,6 +11,7 @@ import { useAuth } from "../../Auth/context/AuthContext"
 import EditModal from "../components/editModal"
 import StorefrontDetailsSkeleton from "../components/skeletons/storefrontDetailsSkeleton"
 import StorefrontItemsSkeleton from "../components/skeletons/storefrontItemsSkeleton"
+import toast from "react-hot-toast"
 
 
 export default function StorefrontPage(){
@@ -32,8 +33,7 @@ export default function StorefrontPage(){
     }
     const totalPages = Math.ceil(count/ PAGE_SIZE);
     const isOwner = user?.storefront_id === storefrontData?.storefront.id;
-    
-    useEffect(() => {
+
         async function loadItems() {
             setLoading(true);
             setError("");
@@ -48,8 +48,10 @@ export default function StorefrontPage(){
             } finally {
                 setLoading(false);
             }
-            
-        } if(slug) {
+        }
+    
+    useEffect(() => {
+         if(slug) {
             loadItems();
         }
     }, [page])
@@ -165,11 +167,14 @@ export default function StorefrontPage(){
                 <div className="p-4">
                     <div className="flex justify-between items-center mb-4">
                         <p>Items</p>
-                        <div 
-                        onClick={() => setShowCreateModal(true)}
-                        className="bg-primary-light text-primary px-4 py-2 font-semibold rounded-lg">
-                            + Create Item
-                        </div>
+                        {isOwner && (
+                            <button 
+                            onClick={() => setShowCreateModal(true)}
+                            className="bg-primary-light text-primary px-4 py-2 font-semibold rounded-lg">
+                                + Create Item
+                            </button>                            
+                        )}
+
                     </div>
 
                     {/* Item grid */}
@@ -212,7 +217,23 @@ export default function StorefrontPage(){
             </main>
 
 
-            {showCreateModal && <ItemFormModal mode="create" onClose={() => setShowCreateModal(false)} />}
+            {showCreateModal && 
+                <ItemFormModal 
+                mode="create" 
+                onClose={() => {
+                    setShowCreateModal(false);
+                    toast.success('Item created successfully');
+                }} 
+                storefrontId={storefrontData?.storefront.id}
+                // onSuccess={loadItems}
+                onSuccess={() => {
+                if (page === 1) {
+                    loadItems();
+                } else {
+                    setPage(1);
+                }
+                }}                
+            />}
             {editModal && 
                 <EditModal 
                 onClose={() => setEditModal(false)} 

@@ -6,8 +6,8 @@ export default function StorefrontItemCard({id, name, slug, storefrontSlug, imag
 
     const statusStyles = {
     Available: "text-green-700",
-    "Made-to-order": "text-orange-400",
-    Sold: "text-red-600 ",
+    "Made to order": "text-orange-400",
+    "Sold Out": "text-red-600 ",
     };    
 
     return(

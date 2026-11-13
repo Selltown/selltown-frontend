@@ -1,11 +1,51 @@
-import { useState } from "react";
 import { X, Camera, Plus, ChevronDown, Lock, Trash2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { itemSchema } from "../schema/itemFormModalSchema";
+import { createItem } from "../services/storefrontService";
+import { useState } from "react";
 
-const STATUS = ["Available", "Made-to-order", "Sold"];
+const STATUS = ["Available", "Made to order", "Sold Out"];
+const STATUS_IDS = {
+  "Available": 1,
+  "Made to order": 2,
+  "Sold Out": 3
+}
 
-export default function ItemFormModal({ mode = "create", onClose }) {
-    const [status, setStatus] = useState("");
+export default function ItemFormModal({ mode = "create", onClose, storefrontId, onSuccess }) {
     const isEdit = mode === "edit";
+
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+      resolver: zodResolver(itemSchema),
+      defaultValues: isEdit ? {
+        name: "Kente wrap dress",
+        price: 320,
+        description: "Hand-dyed cotton wrap dress in a sunset kente pattern. Adjustable waist tie, midi length, lined bodice.",
+        status: "Available",
+      } : { name: "", price: "", image: null, description: "", status: "" }
+    });
+
+    const status = watch("status");
+
+    const onSubmit = async (formData) => {
+      if(isEdit) return;
+
+      try {
+        const response = await createItem({
+          name: formData.name,
+          image: null,
+          price: formData.price,
+          description: formData.description,
+          status: STATUS_IDS[formData.status],
+          storefront: storefrontId,
+        })
+        console.log(response)
+        onSuccess?.();
+        onClose()
+      } catch (error) {
+        console.log(error.response?.data)
+      }
+    }
 
   return (
     <div 
@@ -24,7 +64,12 @@ export default function ItemFormModal({ mode = "create", onClose }) {
             </button>
             <span className="text-md font-medium">{isEdit ? "Edit item" : "Create item"}</span>
           </div>
-          <button className="text-sm font-medium text-primary">Save</button>
+          <button 
+            onClick={handleSubmit(onSubmit)}
+            className="text-sm font-medium text-primary"
+          >
+            Save
+          </button>
         </div>
 
         <div className="max-h-[75vh] overflow-y-auto">
@@ -60,10 +105,11 @@ export default function ItemFormModal({ mode = "create", onClose }) {
             <label className="mb-1.5 block text-xs text-neutral-500">Item name</label>
             <input
               type="text"
-              defaultValue={isEdit ? "Kente wrap dress" : ""}
+              {...register("name")}
               placeholder="e.g. Kente wrap dress"
               className="h-11 w-full rounded-md border border-neutral-300 px-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-[#1D9E75]"
             />
+            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
           </div>
 
           {/* Price */}
@@ -71,10 +117,11 @@ export default function ItemFormModal({ mode = "create", onClose }) {
             <label className="mb-1.5 block text-xs text-neutral-500">Price (GH₵)</label>
             <input
               type="number"
-              defaultValue={isEdit ? 320 : ""}
+              {...register("price")}
               placeholder="0.00"
               className="h-11 w-full rounded-md border border-neutral-300 px-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-[#1D9E75]"
             />
+            {errors.price && <p className="mt-1 text-xs text-red-500">{errors.price.message}</p>}            
           </div>
 
           {/* Description */}
@@ -82,14 +129,11 @@ export default function ItemFormModal({ mode = "create", onClose }) {
             <label className="mb-1.5 block text-xs text-neutral-500">Full description</label>
             <textarea
               rows={3}
-              defaultValue={
-                isEdit
-                  ? "Hand-dyed cotton wrap dress in a sunset kente pattern. Adjustable waist tie, midi length, lined bodice."
-                  : ""
-              }
+              {...register("description")}
               placeholder="Describe the item — materials, size, how it's made..."
               className="w-full resize-none rounded-md border border-neutral-300 px-2.5 py-2 text-sm leading-relaxed outline-none placeholder:text-neutral-400 focus:border-[#1D9E75]"
             />
+            {errors.description && <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>}            
           </div>
 
           {/* Status */}
@@ -98,16 +142,15 @@ export default function ItemFormModal({ mode = "create", onClose }) {
             <div className="flex gap-2">
                 {STATUS.map((stat) => (
                     <button
-                    onClick={() => {
-                        setStatus(stat);
-                        console.log(stat);
-                    }} 
+                    type="button"
+                    onClick={() => setValue("status", stat, {shouldValidate: true})} 
                     key={stat}
                     className={`flex-1 rounded-md border py-2 text-[12px] text-neutral-400 font-medium ${status === stat ? "border-primary text-primary bg-primary-light" : "border"}`}>
                         {stat}
                     </button>                    
                 ))}
             </div>
+            {errors.status && <p className="mt-1 text-xs text-red-500">{errors.status.message}</p>}            
           </div>
 
           {/* Delete — edit mode only */}
