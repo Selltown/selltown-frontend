@@ -16,3 +16,8 @@ export const updateStorefront = async (id, name) => {
     const data = await api.patch(`/storefronts/${id}/update/`, {name});
     return data;
 }
+
+export const createItem = async (item) => {
+    const data = await api.post("/items/create/", item);
+    return data;
+}

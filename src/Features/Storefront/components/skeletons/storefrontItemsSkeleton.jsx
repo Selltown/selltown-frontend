@@ -12,12 +12,13 @@ export default function StorefrontItemsSkeleton() {
                     {/* Image section */}
                     <div className="relative flex items-center justify-center h-25 bg-gray-200 rounded-t-xl">
                         {/* Status badge */}
-                        <Skeleton
-                            width={65}
-                            height={18}
-                            borderRadius={4}
-                            className="absolute top-2 left-2"
-                        />
+                        <div className="absolute top-2 left-2">
+                            <Skeleton
+                                width={65}
+                                height={18}
+                                borderRadius={4}
+                            />                            
+                        </div>
 
                         {/* Product image placeholder */}
                         <Skeleton
